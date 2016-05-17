@@ -18,3 +18,24 @@ then update the entropy info
 equo update
 ```
 
+# How to create repo like this ?
+
+Here are some info how I create this repo
+
+## Use portage build package 
+
+emerge -avB slic3r-bin
+
+## Translate it to entropy package
+
+mkdir -p /tmp/packages
+equo pkg inflate --savedir  /tmp/packages /usr/portage/packages/media-gfx/slic3r-bin-1.2.9.tbz2
+
+## add it
+
+eit inject -h  /tmp/packages/media-gfx/media-gfx\:slic3r-bin-1.2.9.ab435eab728789df8d0ea4e5aafe43c21f7adcf6~9999.tbz2
+
+## push it
+
+eit push
+
