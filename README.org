@@ -1,0 +1,136 @@
+* coldnew's Sabayon Linux repository
+
+This is my personal's sabayon linux repository, feel free to use it :)
+
+* Add this repo to your Sabayon Linux
+
+To use this binary host, you can use following command to add it to your Sabayon Linux system:
+
+#+BEGIN_SRC sh
+  equo repo add coldnew \
+       --desc "coldnew's Sabayon Linux Repository" \
+       --repo https://coldnew.github.io/sabayon-coldnew/#bz2  \
+       --pkg https://coldnew.github.io/sabayon-coldnew/
+#+END_SRC
+
+then update the entropy info
+
+#+BEGIN_SRC sh
+  equo update
+#+END_SRC
+
+* How to create repo like this one ?
+
+Here are some info how I create this repo
+
+** Install sys-apps/entropy-server
+
+   We need to install entropy-server first
+
+   : equo install sys-apps/entropy-server
+
+** Edit /etc/entropy/server.conf
+
+   You can create the =/etc/entropy/server.conf= from =/etc/entropy/server.conf.example=.
+
+   : cp /etc/entropy/server.conf.example /etc/entropy/server.conf
+
+   If you want your repo just an overlay, you need to setup this
+
+   #+BEGIN_SRC sh
+     # Community repository mode, enable this if your repositories
+     # are just "overlays" of other full-blown repositories.
+     # For example, you're providing your own set of customized packages
+     # that are meant to work with some distribution repositories' packages.
+     #
+     # syntax for community-mode:
+     #    community-mode = <enable/disable>
+     #    default is: disable
+     #
+     community-mode = enable
+   #+END_SRC
+
+   You also need to modify you default repository name (ex: =coldnew=)
+
+   #+BEGIN_SRC sh
+     #  syntax for default-repository:
+     #
+     #    default-repository: Currently working repository identifier (if you have
+     #        more than one server-side repository, this indicates the one which
+     #        Entropy Server is authorized to work on)
+     #    default-repository = <repository identifier>
+     #
+     default-repository = coldnew
+   #+END_SRC
+
+** Edit /etc/entropy/repositories.conf.d/
+
+   You need to add you repository info in =/etc/entropy/repositories.conf.d/=, take my repo for example, I need to create =entropy_coldnew= with following contents:
+
+   #+BEGIN_SRC conf
+     # Repository configuration file automatically generated
+     # by Entropy on your behalf.
+
+     [coldnew]
+     desc = coldnew's Sabayon Linux Repository
+     repo = file:///w/binhost/sabayon-coldnew/
+     enabled = true
+
+     pkg = https://coldnew.github.io/sabayon-coldnew/
+   #+END_SRC
+
+** Initialize you repository
+
+   Just switch to your repository dir (change =coldnew= to you repository name)
+
+   #+BEGIN_SRC sh
+     eit init coldnew
+   #+END_SRC
+
+** Use portage build the package
+
+   Just use portage build the package you need, note that I use =-B= to make portage just build the package and not install to system.
+
+   #+BEGIN_SRC sh
+     emerge -avB dev-embedded/stlink
+   #+END_SRC
+
+   After package builded, you can find the package locate in =/usr/portage/packages/dev-embedded/stlink-1.2.0.tbz2=, we need to transfer it to Sabayon's package.
+
+** Transfer portage package to entropy one
+
+   Let's create a tmp directory =/tmp/packages=
+
+   #+BEGIN_SRC sh
+     mkdir -p /tmp/packages
+   #+END_SRC
+
+   It's time to transfer portage package to entropy package
+
+   #+BEGIN_SRC sh
+     equo pkg inflate --savedir /tmp/packages /usr/portage/packages/dev-embedded/stlink-1.2.0.tbz2
+   #+END_SRC
+
+** Add the package to you repo
+
+   Now, there's are some new package in you =/tmp/packages= directory, juse add them to your repo
+
+   #+BEGIN_SRC sh
+     eit inject /tmp/packages/dev-embedded/dev-embedded:stlink-1.2.0.998e8a33fb4db7a3a016e6c741c7512101655adc~9999.tbz2
+   #+END_SRC
+
+** Push all changes
+
+   After all things done, you can push all your modification to your repo.
+
+   #+BEGIN_SRC sh
+     eit push
+   #+END_SRC
+
+* References
+
+  Here are some reference
+
+  ~[1]~ [[https://wiki.sabayon.org/index.php?title=En:HOWTO:_Set_Up_A_Community_Repository][HOWTO: Set Up A Community Repository]]
+
+  ~[2]~ [[http://ordinatechnic.com/os-specific-guides/sabayon/using-portage-to-build-a-binary-package-for-installation-by-entropy][Sabayon: Using Portage to Build a Binary Package for Installation by Entropy]]
