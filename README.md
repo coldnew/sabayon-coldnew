@@ -1,7 +1,9 @@
 # sabayon-coldnew
 coldnew's Sabayon Linux repository
 
-# Use following command to add this repo to your sabayon
+# Add this repo to your sabayon
+
+To use this binary host, you can use follwoing command to add it to you Sabayon Linux system:
 
 ```sh
 equo repo add coldnew \
@@ -9,3 +11,10 @@ equo repo add coldnew \
      --repo https://coldnew.github.io/sabayon-coldnew//#bz2  \
      --pkg https://coldnew.github.io/sabayon-coldnew/
 ```
+
+then update the entropy info
+
+```sh
+equo update
+```
+
