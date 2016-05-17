@@ -7,5 +7,5 @@ coldnew's Sabayon Linux repository
 equo repo add coldnew \
      --desc "coldnew's Sabayon Linux Repository" \
      --repo https://coldnew.github.io/sabayon-coldnew//#bz2  \
-     --pkg http://coldnew.github.io/sabayon-coldnew/
+     --pkg https://coldnew.github.io/sabayon-coldnew/
 ```
