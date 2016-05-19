@@ -2,6 +2,14 @@
 
 This is my personal's sabayon linux repository, feel free to use it :)
 
+#+begin_quote
+*This project is not mantain anymore, I still more like to use Gentoo Linux instead of Sabayon.*
+#+end_quote
+
+* Architecture support
+
+This project support both =amd64= and =armv7l= architecture on Sabayon Linux.
+
 * Add this repo to your Sabayon Linux
 
 To use this binary host, you can use following command to add it to your Sabayon Linux system:
